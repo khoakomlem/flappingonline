@@ -7,7 +7,7 @@ function setup(){
 	var Height=window.innerHeight;
 	var canv = createCanvas(Width, Height);
 	canv.parent("canvas");
-	
+
 	setInterval(()=>$('#ping2').html("FPS: "+Math.floor(frameRate())),1000);
 	setInterval(()=>{
 		if (ok==false){
@@ -17,6 +17,7 @@ function setup(){
 	},1000);
 }
 function draw(){
+	background('gray');
 	if (focused=== false){
 		clearTimeout(timeout);
 		timeout=setTimeout(function(){
