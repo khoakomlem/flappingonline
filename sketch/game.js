@@ -1,5 +1,5 @@
 function preload(){
-	var img=loadImage('sketch/image/t.jpg');
+	// var img=loadImage('sketch/image/t.jpg');
 }
 function setup(){
 	createCanvas(1,1);
