@@ -2,12 +2,17 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
+<<<<<<< HEAD
 var random = require('random-js')();
 var arraySort = require('array-sort');
 var port = process.env.PORT || 3000;
 var rank=false, pipe=[], time=300;
 var score=[], hang, num=0,arr=[];
 
+=======
+var port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080;
+var ip = process.env.OPENSHIFT_NODEJS_IP || process.env.IP || '0.0.0.0';
+>>>>>>> d27176f6de51e024ba930f96852cafb43e488b86
 app.get('/', function(req, res){
 	var express=require('express');
 	app.use(express.static(path.join(__dirname)));
@@ -121,6 +126,7 @@ io.on('connection', function(socket){
 
 http.listen(port, function(){
 	console.log('listening on *'+port);
+<<<<<<< HEAD
 });
 setInterval(()=>{
 	if (rank)
@@ -131,3 +137,6 @@ setInterval(()=>{
 		time=-1;
 	console.log(score);
 },1000);
+=======
+});
+>>>>>>> d27176f6de51e024ba930f96852cafb43e488b86

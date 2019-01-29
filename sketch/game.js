@@ -1,5 +1,6 @@
 var piperank=[];
 function preload(){
+<<<<<<< HEAD
 	bg=loadImage('sketch/image/bg.png');
 	me=new Bird();
 	skin=loadImage('sketch/image/bird.png');
@@ -7,6 +8,9 @@ function preload(){
 	pImage1=loadImage('sketch/image/pipe1.jpg');
 	pImage2=loadImage('sketch/image/pipe2.jpg');
 	deathimg=loadImage('sketch/image/skull.png');
+=======
+	// var img=loadImage('sketch/image/t.jpg');
+>>>>>>> d27176f6de51e024ba930f96852cafb43e488b86
 }
 function setup(){
 	var canv = createCanvas(Width, Height);
