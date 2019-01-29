@@ -27,10 +27,11 @@
 		var Height=window.innerHeight;
 		var asd,vao,timeout,click=true,score=0;
 		var fram=1;
-		var bg,me,percent=70,cong=false,loss,thua,ranking=false,timer=0,regis=false;
+		var bg,me,percent=70,cong=false,loss,thua,ranking=false,timer=0,regis=false,num=0;
 		var pipes=[];
 		var pImage1, pImage2, deathimg, pipefram=0;
 		function loser(a){
+			num=0;
 			score=0;
 			pipes.splice(0, pipes.length);
 			noLoop();

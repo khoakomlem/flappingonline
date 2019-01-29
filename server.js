@@ -97,6 +97,7 @@ io.on('connection', function(socket){
   				if (pipe[i].top<=20)
   				      pipe[i].top+=20;
 			}
+			console.log(pipe);
 			socket.emit('rankpipe', pipe);
 			time=300;
 			setTimeout(()=>{

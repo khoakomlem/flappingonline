@@ -64,9 +64,13 @@ function draw(){
 	clear();
 	pipefram++;
 	if (pipefram>70){
+		num++;
+		if (num>1000)
+			num=1;
 		pipes.push(new Pipe());
-		if (ranking)
-			pipes[pipes.length-1]=Object.assign(pipes[pipes.length-1],piperank[pipes.length-1]);
+		if (ranking){
+			pipes[pipes.length-1]=Object.assign(pipes[pipes.length-1],piperank[num]);
+		}
 		pipefram=0;
 	}
 	image(bg,fram,0);
