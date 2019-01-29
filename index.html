@@ -42,7 +42,7 @@
 					clear();
 					$('#screen1').fadeIn();
 				});
-			},1000);
+			},1200);
 			if (ranking) socket.emit('die');
 			ranking=true;
 		}
@@ -50,6 +50,8 @@
 	<script src="lib/jquery-3.3.1.min.js"></script>
 	<script src="lib/p5.min.js"></script>
 	<script src="sketch/bird.js"></script>
+	<div id="time" style="position: fixed;left: 10px; top: 10px; font-size: 15px; border: double;z-index: 3;"></div>
+	<div id='online' style="position: fixed;right: 10px; bottom: 10px; font-size: 25px; border: dotted;z-index: 3;"></div>
 	<div id="info" class="selectDisable" style="position: fixed; top: 10px; right: 10px;z-index: 3;">
 		<div id="ping1">Ping: 0ms</div>
 		<div id="ping2">FPS: 0</div>

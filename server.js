@@ -16,10 +16,11 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
 
-
+	io.emit('online', io.sockets.server.engine.clientsCount);
 	socket.on('disconnect', function(){
 		delete score[socket.id];
 		num--;
+		socket.emit('time', rank, time, num)
 		if (num<0)
 			num=0;
 		io.emit('online', io.sockets.server.engine.clientsCount);
@@ -38,7 +39,7 @@ io.on('connection', function(socket){
 			socket.emit('tab',arr);
 		}
 	});
-	socket.on('check', ()=>socket.emit('time', rank, time));
+	socket.on('check', ()=>socket.emit('time', rank, time, num));
 	socket.on('plus', ()=>{
 		if (rank){
 			score[socket.id].score++;
@@ -55,6 +56,7 @@ io.on('connection', function(socket){
 			high:0
 		};
 		num++;
+		socket.emit('time', rank, time, num);
 		arr=[];
 		for (var i in score){
 			arr.push(score[i]);
@@ -76,7 +78,7 @@ io.on('connection', function(socket){
 		if (rank==false){
 			rank=true;
 			console.log("Có người tạo đấu hạng!");
-			socket.emit('time', rank, time)
+			socket.emit('time', rank, time, num);
 			pipe.splice(0, pipe.length);
 			for (var i=0; i<=1000; i++){
 				pipe[i]={
@@ -101,7 +103,7 @@ io.on('connection', function(socket){
 			time=300;
 			setTimeout(()=>{
 				rank=false;
-				io.emit('time', rank, time);
+				io.emit('time', rank, time, num);
 				arr=[];
 				for (var i in score){
 					arr.push(score[i]);

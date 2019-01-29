@@ -24,12 +24,13 @@ $('#rank').click(function(){
 	}
 })
 ranking=true;
-socket.on('time', (data,data2)=>{
+socket.on('time', (data,data2,data3)=>{
 	if (data){
 		timer=data2;
 	} else {
 		timer=-2;
 	}
+	$('#rank').val('RANK ['+data3+' playing]');
 
 });
 setInterval(function(){
@@ -39,9 +40,9 @@ socket.emit('check');
 setInterval(()=>{
 	timer--;
 	if (timer>-1)
-		$('#rank').val('RANK - ['+timer+'s]');
+		$('#time').html('RANK - ['+timer+'s]');
 	else
-		$('#rank').val('RANK');
+		$('#time').html('');
 },1000);
 socket.on('tab', data=>{
 	var arr = [];
@@ -70,4 +71,7 @@ $(document).keyup(e=>{
   		socket.emit('tab');
   		$('#table').slideUp(200);
   	}
+})
+socket.on('online', data=>{
+	$('#online').html('Online: '+data);
 })
