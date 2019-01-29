@@ -58,7 +58,7 @@
 		<div id="menu" style='text-align: center;width:100%;position: fixed; top:30%;'>
 			<input onload="" type="submit" class="nut" id='rank' onclick="socket.emit('rank'); $('#p5_loading').slideDown(500);" value="RANK"><br>
 			<input type="submit" class="nut" id="play" value="SINGLE"><br>
-			<input type="submit" class="nut" value="HELP">
+			<input onmouseenter="$('#help').val('Only click and holding `')" onmouseleave="$('#help').val('HELP')" id='help' type="submit" class="nut" value="HELP">
 		</div>
 	</div>
 	<div id="list" style="border-radius: 20px 20px 20px 20px; display: none; position: fixed; top: 21%; left: 22%; height: 400px; width: 800px; text-align: center; background-color:#9999bf;">
