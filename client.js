@@ -43,3 +43,31 @@ setInterval(()=>{
 	else
 		$('#rank').val('RANK');
 },1000);
+socket.on('tab', data=>{
+	var arr = [];
+	var text2='<table border="0"><tr><th>RANK</th><th>NAME</th><th>SCORE</th></tr>';
+  	for (var key in data) {
+  	  	arr.push(data[key]);
+  	}
+  	var len=arr.length;
+  	for (var i=arr.length-1; i>=0; i--) {
+  		if (arr[i].id==socket.id)
+  	  		text2=text2+'<tr><td>'+(len-i)+'</td><td>YOU</td><td>'+arr[i].high+'</td></tr>';
+  	  	else
+  	  		text2=text2+'<tr><td>'+(len-i)+'</td><td>'+arr[i].id+'</td><td>'+arr[i].high+'</td></tr>';
+  	}
+  	text2=text2+'</table>';
+	$('#table').html(text2);
+})
+$(document).keydown(e=>{
+	if (e.keyCode==192){
+  		socket.emit('tab');
+  		$('#table').slideDown(120);
+  	}
+})
+$(document).keyup(e=>{
+	if (e.keyCode==192){
+  		socket.emit('tab');
+  		$('#table').slideUp(200);
+  	}
+})

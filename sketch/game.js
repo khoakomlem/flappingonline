@@ -43,9 +43,10 @@ function setup(){
 	socket.on('done', (data,data2)=>{
 		if (ranking){
 			regis=false;
+			thua=true;
 			loser();
 			ranking=false;
-			alert("Trận đã kết thúc! Bạn đạt hạng: "+data+" với số điểm: "+data2);
+			alert("Congratulations! You got a "+data+" place with the score: "+data2);
 			timer=300;
 		}
 	})

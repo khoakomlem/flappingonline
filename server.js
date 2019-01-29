@@ -6,7 +6,7 @@ var random = require('random');
 var arraySort = require('array-sort');
 var port = process.env.PORT || 3000;
 var rank=false, pipe=[], time=300;
-var score=[], hang, num=0;
+var score=[], hang, num=0,arr=[];
 
 app.get('/', function(req, res){
 	var express=require('express');
@@ -28,15 +28,23 @@ io.on('connection', function(socket){
 		socket.emit('pong',data);
 	});
 	socket.on('die', ()=>{
-		if (rank)
+		if (rank){
 			score[socket.id].score=0;
+			arr=[];
+			for (var i in score){
+				arr.push(score[i]);
+			}
+			arraySort(arr,'high');
+			socket.emit('tab',arr);
+		}
 	});
 	socket.on('check', ()=>socket.emit('time', rank, time));
 	socket.on('plus', ()=>{
 		if (rank){
 			score[socket.id].score++;
-			if (score[socket.id].score>score[socket.id].high)
+			if (score[socket.id].score>score[socket.id].high){
 				score[socket.id].high=score[socket.id].score;
+			}
 		}
 		
 	})
@@ -47,6 +55,20 @@ io.on('connection', function(socket){
 			high:0
 		};
 		num++;
+		arr=[];
+		for (var i in score){
+			arr.push(score[i]);
+		}
+		arraySort(arr,'high');
+		socket.emit('tab',arr);
+	})
+	socket.on('tab', ()=>{
+		arr=[];
+		for (var i in score){
+			arr.push(score[i]);
+		}
+		arraySort(arr,'high');
+		socket.emit('tab',arr);
 	})
 	socket.on('rank',()=>{
 		if (rank)
@@ -80,14 +102,18 @@ io.on('connection', function(socket){
 			setTimeout(()=>{
 				rank=false;
 				io.emit('time', rank, time);
-				arraySort(score,'high');
+				arr=[];
 				for (var i in score){
+					arr.push(score[i]);
+				}
+				arraySort(arr,'high');
+				for (var i in arr){
 					num--;
-					io.to(score[i].id).emit('done',num+1,score[i].high);
+					io.to(arr[i].id).emit('done',num+1,arr[i].high);
 					delete score[i];
 				}
 				num=0;
-			},300000);
+			},30000);
 		}	
 	});
 });
@@ -102,5 +128,5 @@ setInterval(()=>{
 		time=300;
 	if (time<0)
 		time=-1;
-	console.log(score+' '+num);
+	console.log(score);
 },1000);
