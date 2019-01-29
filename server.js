@@ -73,12 +73,12 @@ io.on('connection', function(socket){
 		socket.emit('tab',arr);
 	})
 	socket.on('rank',()=>{
+		io.emit('time', rank, time, num);
 		if (rank)
 			socket.emit('rankpipe', pipe);
 		if (rank==false){
 			rank=true;
 			console.log("Có người tạo đấu hạng!");
-			socket.emit('time', rank, time, num);
 			pipe.splice(0, pipe.length);
 			for (var i=0; i<=1000; i++){
 				pipe[i]={

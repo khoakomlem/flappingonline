@@ -6,7 +6,7 @@
 	<link rel="shortcut icon" type="image/png" href="/favicon.png"/>
 </head>
 <body>
-	<div id="table" style="position: fixed;top: 30%; left: 39%;width: 300px;height: 200xp;background-color: #b8c1d1;z-index: 4;border-radius: 10px 10px 10px 10px"></div>
+	<div id="table" class="selectDisable" style="display: none;position: fixed;top: 30%; left: 39%;width: 300px;height: 200xp;background-color: #b8c1d1;z-index: 4;border-radius: 10px 10px 10px 10px"></div>
 	<div id="canvas" style="position: fixed;top: 0px;left: 0px;width:100%;height: 100%;background-color:black;z-index: 1; display: none;">
 		<b><div id='score' class="selectDisable" style="position:fixed;top: 10px;z-index:2;font-size: 80px;font-family: arial;left: 48%;">0</div></b>
 		<div style="text-align: center; position: fixed; top: 40%;width: 100%; z-index: 2;display: none;" id="tap" class="selectDisable">
@@ -50,21 +50,18 @@
 	<script src="lib/jquery-3.3.1.min.js"></script>
 	<script src="lib/p5.min.js"></script>
 	<script src="sketch/bird.js"></script>
-	<div id="time" style="position: fixed;left: 10px; top: 10px; font-size: 15px; border: double;z-index: 3;"></div>
-	<div id='online' style="position: fixed;right: 10px; bottom: 10px; font-size: 25px; border: dotted;z-index: 3;"></div>
+	<div id="time" class="selectDisable" style="position: fixed;left: 10px; top: 10px; font-size: 15px; border: double;z-index: 3;"></div>
+	<div id='online' class="selectDisable" style="position: fixed;right: 10px; bottom: 10px; font-size: 25px; border: dotted;z-index: 3;"></div>
 	<div id="info" class="selectDisable" style="position: fixed; top: 10px; right: 10px;z-index: 3;">
 		<div id="ping1">Ping: 0ms</div>
 		<div id="ping2">FPS: 0</div>
 	</div>
 	<div id='screen1' style='position: fixed;top: 0px;left: 0px;width:100%;height:100%;background-image: url("sketch/image/menu.png");'>
 		<div id="menu" style='text-align: center;width:100%;position: fixed; top:30%;'>
-			<input onload="" type="submit" class="nut" id='rank' onclick="socket.emit('rank'); $('#p5_loading').slideDown(500);" value="RANK"><br>
+			<input onload="" type="submit" class="nut" id='rank' value="RANK"><br>
 			<input type="submit" class="nut" id="play" value="SINGLE"><br>
 			<input onmouseenter="$('#help').val('Only click and holding `')" onmouseleave="$('#help').val('HELP')" id='help' type="submit" class="nut" value="HELP">
 		</div>
-	</div>
-	<div id="list" style="border-radius: 20px 20px 20px 20px; display: none; position: fixed; top: 21%; left: 22%; height: 400px; width: 800px; text-align: center; background-color:#9999bf;">
-		<input type="submit" value="X" onclick="" style="background-color:red;">
 	</div>
 	<script src="client.js"></script>
 	<script src="sketch/game.js"></script>

@@ -17,6 +17,8 @@ $('#canvas').click(()=>{
 	$('#tap').fadeOut(2000);
 })
 $('#rank').click(function(){
+	socket.emit('check');
+	socket.emit('rank');
 	ranking=true;
 	if (regis==false){
 		socket.emit('regis');
