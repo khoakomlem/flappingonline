@@ -2,24 +2,68 @@
 <html>
 <head>
 	<title>Flapping Online</title>
-	<script src="lib/jquery-3.3.1.min.js"></script>
-	<script src="lib/socket.io.js"></script>
-	<script src="lib/p5.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="shortcut icon" type="image/png" href="/favicon.png"/>
 </head>
 <body>
+	<div id="canvas" style="position: fixed;top: 0px;left: 0px;width:100%;height: 100%;background-color:black;z-index: 1; display: none;">
+		<b><div id='score' class="selectDisable" style="position:fixed;top: 10px;z-index:2;font-size: 80px;font-family: arial;left: 48%;">0</div></b>
+		<div style="text-align: center; position: fixed; top: 40%;width: 100%; z-index: 2;display: none;" id="tap" class="selectDisable">
+			<img src="sketch/image/tap.gif" style="display: inline-block;">
+		</div>	
+	</div>
+	<div id="p5_loading" class="loadingclass" style="position:fixed;top:0px; left:0px;width: 100%;height: 100%;background-color: black;z-index:4;">
+		<img src="sketch/image/load.gif" style="position:fixed;bottom:0px;right:0px;z-index: 2;">
+	</div>
+	<script src="lib/socket.io.js"></script>
 	<script>
 		var socket=io();
-		var timeout;
-		var asd;
+		function sleep(delay) {
+   			var start = new Date().getTime();
+    		while (new Date().getTime() < start + delay);
+		}
+		var Width=window.innerWidth;
+		var Height=window.innerHeight;
+		var asd,vao,timeout,click=true,score=0;
+		var fram=1;
+		var bg,me,percent=70,cong=false,loss,thua,ranking=false,timer=0,regis=false;
+		var pipes=[];
+		var pImage1, pImage2, deathimg, pipefram=0;
+		function loser(a){
+			score=0;
+			pipes.splice(0, pipes.length);
+			noLoop();
+			thua=true;
+			image(loss,0,0,Width,Height);
+			setTimeout(()=>{
+				$('#canvas').fadeOut(1000,'linear',()=>{
+					click=true;
+					clear();
+					$('#screen1').fadeIn();
+				});
+			},1000);
+			if (ranking) socket.emit('die');
+			ranking=true;
+		}
 	</script>
-	<script src="client.js"></script>
-	<script src="sketch/game.js"></script>
-	<div id="canvas" style="position: fixed;top: 0px;left: 0px;width:100%;height: 100%;filter: brightness(50%);"></div>
-	<div id="info" style="position: fixed; top: 10px; right: 10px;">
+	<script src="lib/jquery-3.3.1.min.js"></script>
+	<script src="lib/p5.min.js"></script>
+	<script src="sketch/bird.js"></script>
+	<div id="info" class="selectDisable" style="position: fixed; top: 10px; right: 10px;z-index: 3;">
 		<div id="ping1">Ping: 0ms</div>
 		<div id="ping2">FPS: 0</div>
 	</div>
-	<div id="p5_loading" class="loadingclass">Loading (please wait) . . . </div>
+	<div id='screen1' style='position: fixed;top: 0px;left: 0px;width:100%;height:100%;background-image: url("sketch/image/menu.png");'>
+		<div id="menu" style='text-align: center;width:100%;position: fixed; top:30%;'>
+			<input onload="" type="submit" class="nut" id='rank' onclick="socket.emit('rank'); $('#p5_loading').slideDown(500);" value="RANK"><br>
+			<input type="submit" class="nut" id="play" value="SINGLE"><br>
+			<input type="submit" class="nut" value="HELP">
+		</div>
+	</div>
+	<div id="list" style="border-radius: 20px 20px 20px 20px; display: none; position: fixed; top: 21%; left: 22%; height: 400px; width: 800px; text-align: center; background-color:#9999bf;">
+		<input type="submit" value="X" onclick="" style="background-color:red;">
+	</div>
+	<script src="client.js"></script>
 	<script src="sketch/game.js"></script>
 </body>
 </html>

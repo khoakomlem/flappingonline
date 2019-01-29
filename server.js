@@ -2,7 +2,11 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
+var random = require('random');
+var arraySort = require('array-sort');
 var port = process.env.PORT || 3000;
+var rank=false, pipe=[], time=300;
+var score=[], hang, num=0;
 
 app.get('/', function(req, res){
 	var express=require('express');
@@ -11,25 +15,92 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-	// io.emit('online', io.sockets.adapter.rooms['asd'].sockets);
-	socket.on('disconnect', function(){
-		io.emit('online', io.sockets.server.engine.clientsCount);
-	});
 
-	socket.on('package', room=>{
-		io.emit('a','b');
-		socket.broadcast.emit('a','b');
-		io.sockets.emit('a','b');
-		socket.broadcast.emit(1,2,3,4,5);
-		// setTimeout(() {}, 10);
+
+	socket.on('disconnect', function(){
+		delete score[socket.id];
+		num--;
+		if (num<0)
+			num=0;
+		io.emit('online', io.sockets.server.engine.clientsCount);
 	});
 	socket.on('latency', data=>{
 		socket.emit('pong',data);
 	});
-
-	
+	socket.on('die', ()=>{
+		if (rank)
+			score[socket.id].score=0;
+	});
+	socket.on('check', ()=>socket.emit('time', rank, time));
+	socket.on('plus', ()=>{
+		if (rank){
+			score[socket.id].score++;
+			if (score[socket.id].score>score[socket.id].high)
+				score[socket.id].high=score[socket.id].score;
+		}
+		
+	})
+	socket.on('regis',()=>{
+		score[socket.id]={
+			id:socket.id,
+			score:0,
+			high:0
+		};
+		num++;
+	})
+	socket.on('rank',()=>{
+		if (rank)
+			socket.emit('rankpipe', pipe);
+		if (rank==false){
+			rank=true;
+			console.log("Có người tạo đấu hạng!");
+			socket.emit('time', rank, time)
+			pipe.splice(0, pipe.length);
+			for (var i=0; i<=1000; i++){
+				pipe[i]={
+					up:random.boolean(),
+					top:random.int(min=0, max=720-200),
+					bottom:0,
+					w:50,
+					x:0,
+					type:Math.floor(random.int(min=1, max=2)),
+					skull:Math.floor(random.int(min=60, max=70)),
+					skull2:0
+				}
+				if (pipe.type==3)
+   					pipe.type=2;
+				pipe[i].bottom=pipe[i].top+180;
+				pipe[i].x=1366+pipe[i].w;
+				pipe[i].skull2=Math.floor(pipe[i].skull*(33/23));
+  				if (pipe[i].top<=20)
+  				      pipe[i].top+=20;
+			}
+			socket.emit('rankpipe', pipe);
+			time=300;
+			setTimeout(()=>{
+				rank=false;
+				io.emit('time', rank, time);
+				arraySort(score,'high');
+				for (var i in score){
+					num--;
+					io.to(score[i].id).emit('done',num+1,score[i].high);
+					delete score[i];
+				}
+				num=0;
+			},300000);
+		}	
+	});
 });
 
 http.listen(port, function(){
-	console.log('listening on *:3000');
+	console.log('listening on *'+port);
 });
+setInterval(()=>{
+	if (rank)
+		time--;
+	else
+		time=300;
+	if (time<0)
+		time=-1;
+	console.log(score+' '+num);
+},1000);

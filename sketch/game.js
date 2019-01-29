@@ -1,10 +1,14 @@
+var piperank=[];
 function preload(){
-	var img=loadImage('sketch/image/t.jpg');
+	bg=loadImage('sketch/image/bg.png');
+	me=new Bird();
+	skin=loadImage('sketch/image/bird.png');
+	loss=loadImage('sketch/image/loss.png');
+	pImage1=loadImage('sketch/image/pipe1.jpg');
+	pImage2=loadImage('sketch/image/pipe2.jpg');
+	deathimg=loadImage('sketch/image/skull.png');
 }
 function setup(){
-	createCanvas(1,1);
-	var Width=window.innerWidth;
-	var Height=window.innerHeight;
 	var canv = createCanvas(Width, Height);
 	canv.parent("canvas");
 
@@ -15,13 +19,111 @@ function setup(){
 			ok=true;
 		}
 	},1000);
+	frameRate(60);
+	$('#play').click(function(){
+		ranking=false;
+		percent=70;
+		cong=false;
+		me=new Bird();
+		image(bg,0,0);
+		image(skin,me.x,Height/2-50,me.tox,me.toy);
+		$('#screen1').fadeOut(500,'linear',()=>{$('#canvas').fadeIn(500,'linear',()=>{setTimeout(()=>{thua=false},400);$('#tap').fadeIn()});});
+	});
+
+	socket.on('rankpipe', data=>{
+		ranking=true;
+		piperank=data;
+		percent=70;
+		cong=false;
+		me=new Bird();
+		image(bg,0,0);
+		image(skin,me.x,Height/2-50,me.tox,me.toy);
+		$('#screen1').fadeOut(500,'linear',()=>{$('#canvas').fadeIn(500,'linear',()=>{setTimeout(()=>{thua=false},400);$('#tap').fadeIn()});});
+	})
+	socket.on('done', (data,data2)=>{
+		if (ranking){
+			regis=false;
+			loser();
+			ranking=false;
+			alert("Trận đã kết thúc! Bạn đạt hạng: "+data+" với số điểm: "+data2);
+			timer=300;
+		}
+	})
+	noLoop();
+}
+function mousePressed() {
+	if (click){
+		me.fly();
+		if (thua==false){
+			loop();
+		}
+	}
 }
 function draw(){
-	background('gray');
-	if (focused=== false){
+	clear();
+	pipefram++;
+	if (pipefram>70){
+		pipes.push(new Pipe());
+		if (ranking)
+			pipes[pipes.length-1]=Object.assign(pipes[pipes.length-1],piperank[pipes.length-1]);
+		pipefram=0;
+	}
+	image(bg,fram,0);
+	image(bg,fram+Width-1,0);
+	fram-=1;
+	
+	if (fram<-(Width-1))
+		fram=0;
+
+	if (percent>90)
+		cong=false;
+	if (percent<40)
+		cong=true;
+	if (cong)
+		percent+=0.0725;
+	else
+		percent-=0.0725;
+	$('#defaultCanvas0').css('filter','brightness('+percent+'%)');
+	if (fram==-(Width-2))
+		percent=70;
+	if (focused === false){
 		clearTimeout(timeout);
 		timeout=setTimeout(function(){
 			socket.emit('latency', Date.now());
     	},500);
-	} 
+	}
+	for (var i in pipes){
+		if (pipes[i].hit(me)){
+			loser();
+		}
+		if ((pipes[i].x+pipes[i].w<0 && pipes[i].type!=1) || (pipes[i].x+pipes[i].skull<0 && pipes[i].type==2))
+			pipes.splice(0,1);
+			if (pipes[i].type!=1){
+				if (me.x>pipes[i].x+pipes[i].w && pipes[i].scored==false){
+					score++;
+					$('#score').html(score);
+					if (ranking) socket.emit('plus');
+					pipes[i].scored=true;
+				} 
+			} else {
+				if (me.x>pipes[i].x+pipes[i].skull && pipes[i].scored==false){
+					score++;
+					$('#score').html(score);
+					if (ranking) socket.emit('plus');
+					pipes[i].scored=true;
+				}
+				
+			}
+		pipes[i].di();
+		pipes[i].draw();	
+	}
+	me.update();
+	me.draw();
+	if (me.y>height){
+		loser()
+	}
+	if (thua){
+		fram=0;
+		image(loss,0,0,Width,Height);
+	}
 }

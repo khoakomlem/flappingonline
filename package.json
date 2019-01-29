@@ -9,8 +9,10 @@
   "author": "Khoa Dau",
   "license": "ISC",
   "dependencies": {
+    "array-sort": "^1.0.0",
     "express": "^4.16.4",
     "package": "^1.0.1",
+    "random": "^2.0.13",
     "socket.io": "^2.2.0"
   },
   "directories": {
