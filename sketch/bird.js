@@ -13,6 +13,10 @@ function Bird(){
 	this.update = function(){
 		this.y+=this.vel;
 		this.vel+=this.weight;
+    if (this.y<0){
+      this.vel+=0.2;
+      this.y=0;
+    }
 	}
 	this.draw = function()
   	{

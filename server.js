@@ -2,7 +2,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
-var random = require('random');
+var random = require('random-js')();
 var arraySort = require('array-sort');
 var port = process.env.PORT || 3000;
 var rank=false, pipe=[], time=300;
@@ -82,17 +82,15 @@ io.on('connection', function(socket){
 			pipe.splice(0, pipe.length);
 			for (var i=0; i<=1000; i++){
 				pipe[i]={
-					up:random.boolean(),
-					top:random.int(min=0, max=720-200),
+					up:random.bool(),
+					top:random.integer(0, 520),
 					bottom:0,
 					w:50,
 					x:0,
-					type:Math.floor(random.int(min=1, max=2)),
-					skull:Math.floor(random.int(min=60, max=70)),
+					type:random.integer(1, 2),
+					skull:random.integer(60, 70),
 					skull2:0
 				}
-				if (pipe.type==3)
-   					pipe.type=2;
 				pipe[i].bottom=pipe[i].top+180;
 				pipe[i].x=1366+pipe[i].w;
 				pipe[i].skull2=Math.floor(pipe[i].skull*(33/23));
