@@ -113,7 +113,7 @@ io.on('connection', function(socket){
 					delete score[i];
 				}
 				num=0;
-			},30000);
+			},300000);
 		}	
 	});
 });
