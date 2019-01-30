@@ -89,7 +89,7 @@ function draw(){
 	else
 		percent-=0.0725;
 	$('#defaultCanvas0').css('filter','brightness('+percent+'%)');
-	if (fram==-(Width-2))
+	if (fram==-1364)
 		percent=70;
 	if (focused === false){
 		clearTimeout(timeout);
