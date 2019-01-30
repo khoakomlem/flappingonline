@@ -74,7 +74,7 @@ function draw(){
 		pipefram=0;
 	}
 	image(bg,fram,0);
-	image(bg,fram+Width-1,0);
+	image(bg,fram+1365,0);
 	fram-=1;
 	
 	if (fram<-(Width-1))
