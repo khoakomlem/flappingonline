@@ -77,7 +77,7 @@ function draw(){
 	image(bg,fram+1365,0);
 	fram-=1;
 	
-	if (fram<-(Width-1))
+	if (fram<-1365)
 		fram=0;
 
 	if (percent>90)
