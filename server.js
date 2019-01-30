@@ -110,6 +110,7 @@ io.on('connection', function(socket){
 					arr.push(score[i]);
 				}
 				arraySort(arr,'high');
+				num=arr.length;
 				for (var i in arr){
 					num--;
 					io.to(arr[i].id).emit('done',num+1,arr[i].high);

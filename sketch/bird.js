@@ -7,7 +7,7 @@ function Bird(){
 	this.x=60;
 	this.vel=1;
 	this.fly = function(){
-		this.vel=-12;
+		this.vel=-11.5;
 		socket.emit('fly');
 	}
 	this.update = function(){
