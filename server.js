@@ -4,11 +4,10 @@ var io = require('socket.io')(http);
 var path = require('path');
 var random = require('random-js')();
 var arraySort = require('array-sort');
-var port = process.env.PORT || 3000;
 var rank=false, pipe=[], time=300;
 var score=[], hang, num=0,arr=[];
-var port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080;
-var ip = process.env.OPENSHIFT_NODEJS_IP || process.env.IP || '0.0.0.0';
+
+var port = process.env.PORT || 8080;
 
 app.get('/', function(req, res){
 	var express=require('express');
@@ -80,7 +79,7 @@ io.on('connection', function(socket){
 			socket.emit('rankpipe', pipe);
 		if (rank==false){
 			rank=true;
-			console.log("Có người tạo đấu hạng!");
+			// console.log("Có người tạo đấu hạng!");
 			pipe.splice(0, pipe.length);
 			for (var i=0; i<=1000; i++){
 				pipe[i]={
@@ -99,7 +98,7 @@ io.on('connection', function(socket){
   				if (pipe[i].top<=20)
   				      pipe[i].top+=20;
 			}
-			console.log(pipe);
+			// console.log(pipe);
 			socket.emit('rankpipe', pipe);
 			time=300;
 			setTimeout(()=>{
@@ -132,5 +131,5 @@ setInterval(()=>{
 		time=300;
 	if (time<0)
 		time=-1;
-	console.log(score);
+	// console.log(score);
 },1000);
